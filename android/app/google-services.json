@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "844145274091",
+    "project_id": "retrospects-d3dbf",
+    "storage_bucket": "retrospects-d3dbf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:844145274091:android:f02e5ea89b7aed48d4e2ae",
+        "android_client_info": {
+          "package_name": "com.iam.retrospect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "844145274091-qa0tg3k8jq7eb7ker9oddqr3f3of8gi4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfgZpsRtSxm-DK4NVDZ3h6_Ed_4QimZq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "844145274091-qa0tg3k8jq7eb7ker9oddqr3f3of8gi4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
