@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {connect} from 'react-redux';
-import {human} from 'react-native-typography';
+import {systemWeights, human} from 'react-native-typography';
 import firestore from '@react-native-firebase/firestore';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DeviceInfo from 'react-native-device-info';
@@ -50,8 +50,7 @@ class DiaryScreen extends React.Component {
   };
 
   publishPost = async () => {
-    let isValid = this.validateDiary();
-
+    let isValid = await this.validateDiary();
     if (isValid) {
       const id = DeviceInfo.getUniqueId();
 
@@ -87,7 +86,14 @@ class DiaryScreen extends React.Component {
       if (failure.failure == '' || failure.lesson == '') {
         failure.error = true;
         valid = false;
+      } else {
+        delete failure.error;
       }
+    }
+
+    // ensure fields aren't completely empty
+    if (successes.length == 0 && failures.length == 0) {
+      valid = false;
     }
 
     // update variables
@@ -155,7 +161,7 @@ class DiaryScreen extends React.Component {
                       successes[id] = text;
                       store.dispatch(updateLogs({successes}));
                     }}
-                    placeholder="What did you do well today?"></TextInput>
+                    placeholder="What went well today?"></TextInput>
                   <TouchableOpacity
                     style={styles.close}
                     onPress={() => this.removeSuccess(id)}>
@@ -183,26 +189,35 @@ class DiaryScreen extends React.Component {
                       borderWidth: failure.error ? 1 : 0,
                       borderColor: failure.error ? '#F25757' : '#fff',
                       justifyContent: 'space-between',
+                      padding: 3,
                     },
                   ]}
                   key={id}>
                   <View>
-                    <TextInput
-                      value={failure.failure}
-                      onChangeText={text => {
-                        let failures = [...this.props.failures];
-                        failures[id].failure = text;
-                        store.dispatch(updateLogs({failures}));
-                      }}
-                      placeholder="What did you do wrong today?"></TextInput>
-                    <TextInput
-                      value={failure.lesson}
-                      onChangeText={text => {
-                        let failures = [...this.props.failures];
-                        failures[id].lesson = text;
-                        store.dispatch(updateLogs({failures}));
-                      }}
-                      placeholder="What lesson can you learn?"></TextInput>
+                    <View style={styles.horizontalView}>
+                      <Text style={styles.label}>Mistake:</Text>
+                      <TextInput
+                        value={failure.failure}
+                        onChangeText={text => {
+                          let failures = [...this.props.failures];
+                          failures[id].failure = text;
+                          store.dispatch(updateLogs({failures}));
+                        }}
+                        style={styles.textInput}
+                        placeholder="What went wrong?"></TextInput>
+                    </View>
+                    <View style={styles.horizontalView}>
+                      <Text style={styles.label}>Lesson:</Text>
+                      <TextInput
+                        value={failure.lesson}
+                        onChangeText={text => {
+                          let failures = [...this.props.failures];
+                          failures[id].lesson = text;
+                          store.dispatch(updateLogs({failures}));
+                        }}
+                        style={styles.textInput}
+                        placeholder="What lesson can you learn?"></TextInput>
+                    </View>
                   </View>
                   <TouchableOpacity onPress={() => this.removeFailure(id)}>
                     <Ionicons name="close-circle" size={25} color="#F25757" />
@@ -270,6 +285,10 @@ const styles = StyleSheet.create({
   subHeading: {
     ...human.title2Object,
   },
+  label: {
+    ...human.subheadObject,
+    ...systemWeights.semibold,
+  },
   box: {
     width: '90%',
     padding: 20,
@@ -290,10 +309,15 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     padding: 10,
   },
+  textInput: {
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
 });
 
 const mapStateToProps = state => ({
   selectedDate: state.logs.selectedDate,
+  logsDate: state.logs.logsDate,
   successes: state.logs.successes,
   failures: state.logs.failures,
 });

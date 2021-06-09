@@ -43,7 +43,7 @@ class GoalScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.box}>
-          <Text style={styles.subHeading}>Your Goals</Text>
+          <Text style={styles.subHeading}>Daily Goals</Text>
           <View style={styles.horizontalView}>
             <TextInput
               value={this.state.newGoal}

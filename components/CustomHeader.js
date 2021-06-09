@@ -44,6 +44,7 @@ class CustomHeader extends React.Component {
     return (
       <View>
         <CalendarStrip
+          startingDate={this.props.selectedDate}
           selectedDate={this.props.selectedDate}
           onDateSelected={this.onDateChange}
           scrollable
